@@ -1,11 +1,13 @@
 import subprocess
+import sys
 import textwrap
-from typing import Callable
+from typing import Callable, Optional
  
 from harness.dataset import TestCase, DATASET
 from harness.report import EvalResult, EvalReport
 from debugloop.react_loop import ReActLoop
 from debugloop.tools import TOOLS
+from debugloop.agent import resolve_model_name
  
  
 AgentFn = Callable
@@ -20,7 +22,7 @@ def _run_fixed(code: str) -> tuple[str, bool]:
     """
     try:
         result = subprocess.run(
-            ["python3", "-c", textwrap.dedent(code)],
+            [sys.executable, "-c", textwrap.dedent(code)],
             capture_output=True,
             text=True,
             timeout=5,
@@ -49,9 +51,9 @@ def _step_efficiency(steps_used: int, max_steps: int) -> float:
 # ── Runner ────────────────────────────────────────────────────────────────────
  
 class HarnessRunner:
-    def __init__(self, agent: AgentFn, model_name: str = "llama3-70b-8192"):
+    def __init__(self, agent: AgentFn, model_name: Optional[str] = None):
         self.agent = agent
-        self.model_name = model_name
+        self.model_name = resolve_model_name(model_name)
  
     def run_all(
         self,

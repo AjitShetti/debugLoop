@@ -29,7 +29,7 @@ def main():
     parser.add_argument("--case",     type=int,   help="Run a single case by ID")
     parser.add_argument("--category", type=str,   help="Run one category (e.g. LogicBug)")
     parser.add_argument("--dry-run",  action="store_true", help="Use dummy agent — no Groq calls")
-    parser.add_argument("--model",    type=str,   default="llama3-70b-8192")
+    parser.add_argument("--model",    type=str,   default="openai/gpt-oss-120b")
     args = parser.parse_args()
  
     # ── Agent selection ───────────────────────────────────────────────────────
